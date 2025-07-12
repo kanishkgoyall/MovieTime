@@ -18,7 +18,7 @@ app.use(clerkMiddleware())
 
 //API routes
 app.get("/",(req,res)=>{
-    res.send("server is live gsiroljbh;n3r!")})
+    res.send("server is live ")})
 
     app.use('/api/ingest',serve({ client: inngest, functions }))
     app.listen(port,()=>{
