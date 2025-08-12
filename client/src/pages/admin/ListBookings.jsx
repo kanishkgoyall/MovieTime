@@ -2,18 +2,35 @@ import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { dummyBookingData } from '../../assets/assets';
 import Loading from '../../components/Loading';
+import {useAppContext} from '../../context/AppContext'
 
 const ListBookings = () => {
+
+  const currency = import.meta.env.VITE_CURRENCY;
+
+  const { axios ,getToken,user } = useAppContext();
+
     const [bookings, setBookings] = useState([]);
     const [isloading, setIsLoading] = useState(true);
 
     const getAllBookings = async () => {
-        setBookings(dummyBookingData);
+        // setBookings(dummyBookingData);
+        // setIsLoading(false);
+        //using API instead of dummy data
+        try {
+          const { data } = await axios.get('/api/admin/all-bookings', {
+            headers: { Authorization: `Bearer ${await getToken()}` }
+          });
+          setBookings(data.bookings);
+        } catch (error) {
+          console.error(error);
+        }
         setIsLoading(false);
-
     }
 
-    useEffect(() => { getAllBookings(); }, [])
+    useEffect(() => { 
+      if(user){
+      getAllBookings(); } }, [user])
 
 
     return !isloading ? (
@@ -61,4 +78,4 @@ const ListBookings = () => {
     ) : <Loading />
 }
 
-export default ListBookings
+export default ListBookings;

@@ -4,9 +4,14 @@ import { MenuIcon, SearchIcon, TicketPlus } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import '../pages/Favourite.jsx' 
 import '../pages/Movies.jsx' 
+import {useAppContext} from '../../context/AppContext'
 import { useState } from 'react'
 import { useClerk, UserButton, useUser } from '@clerk/clerk-react'
+
 const Navbar = () => {
+
+  const {favoriteMovies}=useAppContext();
+
   const [isOpen, setIsOpen] = useState(false); 
   const navigate=useNavigate()
   const {user}=useUser()
@@ -26,7 +31,7 @@ const Navbar = () => {
       <Link onclick={()=>{scrollTo(0,0);setIsOpen(false)}} to='/movies'> Movies</Link>
       <Link onclick={()=>{scrollTo(0,0);setIsOpen(false)}} to='/'> Releases</Link>
       <Link onclick={()=>{scrollTo(0,0);setIsOpen(false)}} to='/'> Theatres</Link>
-      <Link onclick={()=>{scrollTo(0,0);setIsOpen(false)}} to='/favourite'> Favourite</Link> 
+      {favoriteMovies.length>0 && <Link onclick={()=>{scrollTo(0,0);setIsOpen(false)}} to='/favourite'> Favourite</Link> }
       </div>
       <div className='flex items-center gap-7'>
         <SearchIcon className='max-md:hidden w-8 h-8 cursor-pointer ' />

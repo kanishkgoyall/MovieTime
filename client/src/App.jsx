@@ -14,10 +14,15 @@ import {AddShow} from './pages/admin/AddShow'
 import {ListShows} from './pages/admin/ListShows'
 import {ListBookings} from './pages/admin/ListBookings'
 import { Layout } from './pages/admin/Layout' // Adjust the import path as necessary
+import { AppContext } from '../context/AppContext'
+import { SignIn } from '@clerk/clerk-react'
+import { Loader } from 'lucide-react'
+import Loading from './components/Loading'
 
 const App = () => { 
   const isAdminRoute=useLocation().pathname.startsWith('/admin')
 
+  const {user}= AppContext();
   return (
     <>
     <Toaster/>
@@ -30,8 +35,13 @@ const App = () => {
       <Route path="/movies" element={<Movies />} />
       <Route path="/favorite" element={<Favourite />} />
       <Route path="/my-bookings" element={<MyBookings />} />
+      <Route path="/loading/:nextUrl" element={<Loading />} />
       <Route path="*" element={<Home />} /> {/* fallback route */}
-      <Route path="/admin/*" element={<Layout/>} > 
+      <Route path="/admin/*" element={user ? <Layout/> :(
+        <div className='min-h-screen flex items-center justify-center'>
+          <SignIn fallbackRedirectUrl={'/admin'} / >
+        </div>
+      )}> 
           <Route index element={<Dashboard/>} />
           <Route path="add-shows" element={<AddShow/>} />
           <Route path="list-shows" element={<ListShows/>} />
@@ -45,4 +55,5 @@ const App = () => {
   )
 }
 
-export default App
+export default App;
+
