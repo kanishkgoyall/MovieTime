@@ -3,6 +3,7 @@ import Show from "../models/Show.js"
 import Booking from "../models/booking.js";
 import { User } from "@clerk/express";
 import stripe from "stripe";
+import { inngest } from "../inngest/index.js";
 //Function to check availability of selected seats for a show
 const checkSeatAvailability = async (showId, selectedSeats) => {
 
@@ -95,6 +96,17 @@ export const createBooking = async (req, res) => {
 //gpt search
         booking.paymentLink = session.url;
         await booking.save();
+
+        //run inngest scheduler function to check payment status after 10 mins
+
+        await inngest.send({
+            name: 'app/checkpayment',
+            data: {
+                
+                bookingId: booking._id.toString()
+                
+            }
+        })
 
         res.json({
             success: true,

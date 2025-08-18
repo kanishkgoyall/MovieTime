@@ -18,7 +18,7 @@ await connectDB();
 
 
 //Stripe webhooks route
-
+//gpt
 app.use('/api/stripe',express.raw({type:'application/json'}),stripeWebhooks)
 //Middleware
 app.use(express.json())
