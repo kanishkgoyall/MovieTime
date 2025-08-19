@@ -1,3 +1,6 @@
+import { serve } from "inngest/express";
+
+
 import { use } from "react";
 import Show from "../models/Show.js"
 import Booking from "../models/booking.js";
@@ -104,7 +107,7 @@ export const createBooking = async (req, res) => {
             data: {
                 
                 bookingId: booking._id.toString()
-                
+
             }
         })
 

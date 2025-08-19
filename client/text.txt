@@ -1,2 +1,6 @@
 tmdb aur stripe dono ke sare env se copy krke vercel pe env variable pe jake sab paste and save and redeployement
     
+
+
+inngest me resync app 9:30
+
