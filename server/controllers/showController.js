@@ -3,6 +3,7 @@ import Movie from '../models/Movie.js'
 import { OauthAccessToken } from "@clerk/express";
 import { err } from "inngest/types";
 import Show from "../models/Show.js";
+import { inngest } from "../inngest/index.js";
 //API to get now playing movies from tmdb API
 export const getNowPlayingMovies= async(req,res)=>{
     try {
@@ -45,7 +46,7 @@ export const addShow = async (req, res) => {
             _id:movieId,
             title:movieApiData.title,
             overview:movieApiData.overview,
-            poster_path::movieApiData.poster_path,
+            poster_path:movieApiData.poster_path,
             backdrop_path:movieApiData.backdrop_path,
             genres:movieApiData.genres,
             cast:movieApiData.cast,
@@ -81,10 +82,18 @@ export const addShow = async (req, res) => {
     });
 
 
-    if (showsToCreate>0){
+    if (showsToCreate.length>0){
       await Show.insertMany(showsToCreate)
     }
 
+    //Trigger inngest event
+    await inngest.send({
+      name:"app/show.added",
+      data: {
+        movieTitle:movie.title
+       
+      }
+    })
     res.json({success:true,message:'show added successfully'})
     
 
